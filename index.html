@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calm Corner Companion</title>
+  <style>
+    :root{
+      --ink:#1f2a37;
+      --muted:#526174;
+      --line:rgba(31,42,55,.12);
+      --card:rgba(255,255,255,.78);
+      --glass:rgba(255,255,255,.56);
+      --blue:#4f9fe8;
+      --blue2:#2f7bc0;
+      --green:#77c86a;
+      --green2:#3c9b57;
+      --orange:#ffb550;
+      --orange2:#e28616;
+      --red:#ef6b6b;
+      --red2:#c84040;
+      --purple:#8b7cf6;
+      --teal:#47c8c2;
+      --shadow:0 18px 44px rgba(27,39,54,.14);
+      --shadow-sm:0 10px 24px rgba(27,39,54,.10);
+      --radius:26px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(1100px 700px at 5% 0%, #dff4ff 0%, transparent 60%),
+        radial-gradient(900px 650px at 100% 15%, #efe5ff 0%, transparent 55%),
+        linear-gradient(180deg, #f8fbff 0%, #edf5ff 48%, #f5f0ff 100%);
+      padding:18px 12px 42px;
+    }
+    .wrap{max-width:1120px;margin:0 auto;position:relative}
+    .floaty{position:absolute;opacity:.18;pointer-events:none;font-size:44px;animation:floaty 14s ease-in-out infinite}
+    .f1{top:32px;left:-8px}.f2{top:200px;right:-4px}.f3{bottom:120px;left:8px}
+    @keyframes floaty{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-14px) rotate(4deg)}}
+
+    header{
+      text-align:center;
+      padding:10px 8px 18px;
+    }
+    h1{margin:6px 0 8px;font-size:clamp(2rem,4.5vw,3.5rem);letter-spacing:.2px}
+    .sub{max-width:850px;margin:0 auto 8px;color:var(--muted);font-size:1.03rem;line-height:1.45}
+    .pillrow{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+    .pill{padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.9);box-shadow:var(--shadow-sm);font-weight:800;color:var(--muted)}
+
+    .tabs{background:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.8);backdrop-filter:blur(14px);padding:10px;border-radius:24px;box-shadow:var(--shadow-sm)}
+    .tabrow{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+    .tab{border:0;background:rgba(255,255,255,.82);color:var(--ink);padding:12px 16px;border-radius:999px;font-weight:900;cursor:pointer;box-shadow:0 8px 18px rgba(27,39,54,.08)}
+    .tab.active{background:linear-gradient(135deg,var(--purple),#5ea2f5);color:#fff;box-shadow:0 14px 26px rgba(91,117,235,.28)}
+
+    .panel{margin-top:14px;background:var(--card);border:1px solid rgba(255,255,255,.9);backdrop-filter:blur(14px);border-radius:30px;padding:24px;box-shadow:var(--shadow)}
+    .hidden{display:none!important}
+    .heroGrid,.grid2,.grid3{display:grid;gap:14px}
+    .heroGrid{grid-template-columns:1.1fr .9fr}
+    .grid2{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .grid3{grid-template-columns:repeat(3,minmax(0,1fr))}
+    @media (max-width:900px){.heroGrid,.grid3{grid-template-columns:1fr 1fr}}
+    @media (max-width:700px){.heroGrid,.grid2,.grid3{grid-template-columns:1fr}}
+
+    .card,.soft{background:var(--glass);border:1px solid rgba(255,255,255,.9);border-radius:22px;box-shadow:var(--shadow-sm)}
+    .card{padding:18px}
+    .soft{padding:14px 16px}
+    .sectionTitle{margin:0 0 6px;font-size:clamp(1.6rem,3vw,2.2rem)}
+    .kicker{color:var(--muted);font-size:.98rem;font-weight:800;margin-bottom:12px}
+    .btnrow{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+    .btn{border:0;border-radius:18px;padding:14px 18px;font:inherit;font-weight:900;cursor:pointer;box-shadow:0 12px 22px rgba(27,39,54,.12);background:linear-gradient(135deg,var(--purple),#5ea2f5);color:#fff}
+    .btn.secondary{background:rgba(255,255,255,.84);color:var(--ink);border:1px solid rgba(255,255,255,.95)}
+    .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none}
+
+    .zoneGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:14px}
+    @media(max-width:980px){.zoneGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:620px){.zoneGrid{grid-template-columns:1fr}}
+    .zone{border-radius:26px;padding:18px;color:#fff;position:relative;overflow:hidden;box-shadow:var(--shadow)}
+    .zone h3{margin:0 0 12px;font-size:1.6rem}
+    .faces{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+    .face{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.18);border-radius:20px;padding:12px;text-align:center}
+    .emoji{font-size:2.2rem;line-height:1}
+    .label{margin-top:8px;font-weight:900;font-size:.93rem}
+    .zone .ask{margin:10px 0 8px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.92);color:var(--ink);font-weight:1000;text-align:center}
+    .zone .state{display:inline-block;padding:10px 18px;border-radius:999px;border:3px solid rgba(0,0,0,.2);font-weight:1000;font-size:1.1rem;letter-spacing:.5px;background:rgba(0,0,0,.12)}
+    .zone ul{margin:12px 0 0;padding-left:18px;line-height:1.52}
+    .z-blue{background:linear-gradient(180deg,var(--blue),var(--blue2))}
+    .z-green{background:linear-gradient(180deg,var(--green),var(--green2))}
+    .z-orange{background:linear-gradient(180deg,var(--orange),var(--orange2))}
+    .z-red{background:linear-gradient(180deg,var(--red),var(--red2))}
+
+    .toolGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:14px}
+    @media(max-width:900px){.toolGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:620px){.toolGrid{grid-template-columns:1fr}}
+    .toolCard{padding:16px;border-radius:22px;background:rgba(255,255,255,.7);border:2px solid transparent;box-shadow:var(--shadow-sm);cursor:pointer;transition:.15s ease}
+    .toolCard.active{border-color:#7b8ff8;background:#fff}
+    .toolTop{display:flex;align-items:center;gap:12px}
+    .toolIcon{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;font-size:1.5rem;background:linear-gradient(135deg,#dff4ff,#f4e7ff)}
+    .toolTitle{font-weight:1000;font-size:1.08rem}
+    .toolText{color:var(--muted);margin-top:8px;line-height:1.45;font-size:.96rem}
+
+    .steps{display:grid;gap:12px;margin-top:12px}
+    .step{display:grid;grid-template-columns:56px 1fr;gap:12px;align-items:start;padding:16px;border-radius:22px;background:rgba(255,255,255,.68);border:1px solid rgba(255,255,255,.9);box-shadow:var(--shadow-sm)}
+    .num{width:56px;height:56px;border-radius:18px;display:grid;place-items:center;background:linear-gradient(135deg,#dff4ff,#eee3ff);font-weight:1000;font-size:1.25rem}
+    .step h4{margin:0 0 4px;font-size:1.14rem}
+    .step p{margin:0;color:var(--muted);line-height:1.5}
+
+    .checkin{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
+    @media(max-width:700px){.checkin{grid-template-columns:1fr}}
+    .checkBtn{padding:18px;border-radius:22px;border:0;font:inherit;font-weight:1000;text-align:left;cursor:pointer;box-shadow:var(--shadow-sm);color:#fff}
+    .checkBtn span{display:block;opacity:.92;font-size:.95rem;font-weight:700;margin-top:6px}
+
+    .output{margin-top:14px;padding:16px 18px;border-radius:22px;background:rgba(255,255,255,.82);border:1px solid rgba(255,255,255,.95);box-shadow:var(--shadow-sm)}
+    .output h4{margin:0 0 8px;font-size:1.12rem}
+    .output ul{margin:8px 0 0;padding-left:18px;line-height:1.55}
+    .small{font-size:.92rem;color:var(--muted)}
+    .meter{display:flex;align-items:center;gap:12px;margin-top:14px;padding:14px 16px;border-radius:18px;background:rgba(255,255,255,.82);border:1px solid rgba(255,255,255,.94)}
+    .bar{flex:1;height:12px;background:rgba(31,42,55,.08);border-radius:999px;overflow:hidden}
+    .fill{height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--purple));border-radius:999px}
+    .meterText{font-weight:1000;min-width:66px;text-align:right}
+    .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:rgba(26,38,53,.94);color:#fff;padding:12px 16px;border-radius:16px;opacity:0;pointer-events:none;transition:.18s ease;box-shadow:var(--shadow)}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(-6px)}
+
+    .printBox{margin-top:14px;padding:14px 16px;border-radius:18px;background:linear-gradient(135deg,#edf7ff,#f6f1ff);border:1px solid rgba(123,143,248,.18)}
+    .badge{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.92);border:1px solid rgba(255,255,255,.98);font-weight:900}
+
+    @media print{
+      body{background:#fff;padding:0}
+      .tabs,.btnrow,.toast,.floaty{display:none!important}
+      .panel{box-shadow:none;border:1px solid #ddd;background:#fff}
+      .hidden{display:block!important}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="floaty f1">🦋</div>
+    <div class="floaty f2">✨</div>
+    <div class="floaty f3">🌿</div>
+
+    <header>
+      <h1>Calm Corner Companion</h1>
+      <div class="sub">A more polished, website-ready calm corner inspired by the counselor’s handouts, but rebuilt with a cleaner layout, friendlier language, and interactive tools for home or school use.</div>
+      <div class="pillrow">
+        <div class="pill">💙 Feel it</div>
+        <div class="pill">🧠 Name it</div>
+        <div class="pill">🌿 Try a calm tool</div>
+        <div class="pill">⭐ Celebrate progress</div>
+      </div>
+    </header>
+
+    <section class="tabs">
+      <div class="tabrow">
+        <button class="tab active" data-tab="home">Calm Corner</button>
+        <button class="tab" data-tab="zones">Zones</button>
+        <button class="tab" data-tab="tools">Calm Tools</button>
+        <button class="tab" data-tab="steps">Butterfly Steps</button>
+        <button class="tab" data-tab="support">Support Plan</button>
+      </div>
+    </section>
+
+    <section class="panel tabpanel" id="tab-home">
+      <div class="heroGrid">
+        <div class="card">
+          <h2 class="sectionTitle">What do you need right now?</h2>
+          <div class="kicker">This page is built to help a child pause, identify feelings, and choose one small next step.</div>
+          <div class="checkin">
+            <button class="checkBtn z-blue" data-zone="blue">💙 I feel low<span>sad, hurt, tired, sick</span></button>
+            <button class="checkBtn z-green" data-zone="green">💚 I feel ready<span>calm, focused, happy, excited</span></button>
+            <button class="checkBtn z-orange" data-zone="orange">🧡 I feel unsettled<span>worried, confused, silly, surprised</span></button>
+            <button class="checkBtn z-red" data-zone="red">❤️ I feel big emotions<span>angry, terrified, frustrated, overwhelmed</span></button>
+          </div>
+          <div class="output" id="quickHelp">
+            <h4>Start here</h4>
+            <div class="small">Pick the feeling zone that sounds closest to your body right now.</div>
+          </div>
+          <div class="btnrow">
+            <button class="btn" id="btnWin">I used a calm step</button>
+            <button class="btn secondary" id="btnUndo">Undo</button>
+          </div>
+          <div class="meter">
+            <div style="font-weight:1000">Calm Wins</div>
+            <div class="bar"><div class="fill" id="winFill"></div></div>
+            <div class="meterText" id="winText">0/10</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 class="sectionTitle">A kinder, stronger version</h2>
+          <div class="kicker">The counselor’s sheets focused on calm zones, calm tools, and a break spot. This version keeps that same helpful idea while improving readability and website flow. fileciteturn1file0</div>
+          <div class="grid2">
+            <div class="soft"><strong>Better for web:</strong><br>clean cards, bigger tap targets, clear sections, and a printable layout.</div>
+            <div class="soft"><strong>Better for kids:</strong><br>softer language, visual choices, and one-step-at-a-time guidance.</div>
+            <div class="soft"><strong>Better for caregivers:</strong><br>progress tracking, customizable tools, and support wording that feels warm.</div>
+            <div class="soft"><strong>Safer legally:</strong><br>inspired by the concept, but redesigned instead of copying the handouts exactly.</div>
+          </div>
+          <div class="printBox">
+            <span class="badge">🖨️ Print-friendly</span>
+            <span class="small" style="display:block;margin-top:8px">Use Ctrl/Cmd + P to print a simplified version for a calm corner binder.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel tabpanel hidden" id="tab-zones">
+      <h2 class="sectionTitle">What zone are you in?</h2>
+      <div class="kicker">This keeps the familiar four-zone structure, but adds cleaner grouping and more supportive action suggestions.</div>
+      <div class="zoneGrid">
+        <div class="zone z-blue">
+          <h3>Blue Zone</h3>
+          <div class="faces">
+            <div class="face"><div class="emoji">😢</div><div class="label">Sad</div></div>
+            <div class="face"><div class="emoji">🤕</div><div class="label">Hurt</div></div>
+            <div class="face"><div class="emoji">🤒</div><div class="label">Sick</div></div>
+            <div class="face"><div class="emoji">🥱</div><div class="label">Tired</div></div>
+          </div>
+          <div class="ask">What can I do?</div>
+          <div class="state">REST</div>
+          <ul>
+            <li>Ask for help</li>
+            <li>Take a break in a quiet space</li>
+            <li>Get water, tissues, or comfort</li>
+            <li>Use gentle words: “I need rest.”</li>
+          </ul>
+        </div>
+
+        <div class="zone z-green">
+          <h3>Green Zone</h3>
+          <div class="faces">
+            <div class="face"><div class="emoji">😊</div><div class="label">Happy</div></div>
+            <div class="face"><div class="emoji">🧐</div><div class="label">Focused</div></div>
+            <div class="face"><div class="emoji">😌</div><div class="label">Calm</div></div>
+            <div class="face"><div class="emoji">🤩</div><div class="label">Excited</div></div>
+          </div>
+          <div class="ask">What can I do?</div>
+          <div class="state">GO</div>
+          <ul>
+            <li>Learn, play, and participate</li>
+            <li>Finish work one step at a time</li>
+            <li>Help others kindly</li>
+            <li>Share ideas and ask questions</li>
+          </ul>
+        </div>
+
+        <div class="zone z-orange">
+          <h3>Orange Zone</h3>
+          <div class="faces">
+            <div class="face"><div class="emoji">😮</div><div class="label">Surprised</div></div>
+            <div class="face"><div class="emoji">😕</div><div class="label">Confused</div></div>
+            <div class="face"><div class="emoji">😬</div><div class="label">Worried</div></div>
+            <div class="face"><div class="emoji">🤪</div><div class="label">Silly</div></div>
+          </div>
+          <div class="ask">What can I do?</div>
+          <div class="state">SLOW DOWN</div>
+          <ul>
+            <li>Take 5 slow breaths</li>
+            <li>Count to 10 or squeeze hands</li>
+            <li>Ask, “Can you help me?”</li>
+            <li>Take a short movement break</li>
+          </ul>
+        </div>
+
+        <div class="zone z-red">
+          <h3>Red Zone</h3>
+          <div class="faces">
+            <div class="face"><div class="emoji">😡</div><div class="label">Angry</div></div>
+            <div class="face"><div class="emoji">🤯</div><div class="label">Raging</div></div>
+            <div class="face"><div class="emoji">😱</div><div class="label">Terrified</div></div>
+            <div class="face"><div class="emoji">😠</div><div class="label">Frustrated</div></div>
+          </div>
+          <div class="ask">What can I do?</div>
+          <div class="state">STOP</div>
+          <ul>
+            <li>Move to the calm corner</li>
+            <li>Use a stress ball or pillow squeeze</li>
+            <li>Drink water and breathe</li>
+            <li>Get adult support right away</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel tabpanel hidden" id="tab-tools">
+      <h2 class="sectionTitle">Choose calm tools</h2>
+      <div class="kicker">Pick up to 3 favorites. This updates the page without needing to rewrite the handouts each time.</div>
+      <div class="toolGrid" id="toolGrid"></div>
+      <div class="btnrow">
+        <button class="btn" id="saveTools">Save my favorites</button>
+        <button class="btn secondary" id="clearTools">Clear</button>
+      </div>
+      <div class="output" id="toolOutput">
+        <h4>Suggested favorites</h4>
+        <div class="small">Select a few tools that usually help your child feel safer, quieter, or more regulated.</div>
+      </div>
+    </section>
+
+    <section class="panel tabpanel hidden" id="tab-steps">
+      <h2 class="sectionTitle">Butterfly steps to reset</h2>
+      <div class="kicker">Inspired by the calming butterfly theme from the binder pages, but rewritten for clearer website use.</div>
+      <div class="steps">
+        <div class="step"><div class="num">1</div><div><h4>Pause and land softly</h4><p>Stop your body. Put both feet on the floor, chair, or cushion. You are safe.</p></div></div>
+        <div class="step"><div class="num">2</div><div><h4>Breathe in, breathe out</h4><p>In through the nose for 4. Out slowly for 4. Try 5 rounds.</p></div></div>
+        <div class="step"><div class="num">3</div><div><h4>Pick one quiet tool</h4><p>Choose drawing, squeezing, rocking, a stuffed animal, or another favorite calm tool.</p></div></div>
+        <div class="step"><div class="num">4</div><div><h4>Let the feeling get smaller</h4><p>You do not have to fix everything at once. Just help your body settle a little.</p></div></div>
+        <div class="step"><div class="num">5</div><div><h4>Return when ready</h4><p>When your body feels safer, you can go back, ask for support, or take one more break.</p></div></div>
+      </div>
+      <div class="btnrow">
+        <button class="btn" id="breathBtn">Start a 30-second breathing timer</button>
+      </div>
+      <div class="output hidden" id="breathBox">
+        <h4 id="breathText">Breathe in…</h4>
+        <div class="small" id="breathTime">30 seconds left</div>
+      </div>
+    </section>
+
+    <section class="panel tabpanel hidden" id="tab-support">
+      <h2 class="sectionTitle">Support plan</h2>
+      <div class="kicker">For caregivers, teachers, or a website owner who wants this to feel personal and useful.</div>
+      <div class="grid3">
+        <div class="card">
+          <h3 style="margin:0 0 8px">Helpful phrases</h3>
+          <ul style="margin:0;padding-left:18px;line-height:1.55">
+            <li>“Your body is telling us something.”</li>
+            <li>“Let’s make it smaller, not perfect.”</li>
+            <li>“Do you need quiet, movement, or comfort?”</li>
+            <li>“I can stay with you while you calm down.”</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 style="margin:0 0 8px">Ideas to customize</h3>
+          <ul style="margin:0;padding-left:18px;line-height:1.55">
+            <li>Add your daughter’s name</li>
+            <li>Replace icons with real photos of her tools</li>
+            <li>Add audio buttons for read-aloud support</li>
+            <li>Link one zone to one preferred strategy</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 style="margin:0 0 8px">Website improvements included</h3>
+          <ul style="margin:0;padding-left:18px;line-height:1.55">
+            <li>More balanced colors</li>
+            <li>Cleaner spacing and larger tap targets</li>
+            <li>Interactive saving for favorite tools</li>
+            <li>Progress tracker and printable pages</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="toast" id="toast">Saved</div>
+  </div>
+
+  <script>
+    const TOOL_KEY = 'calm_corner_favorites_v2';
+    const WIN_KEY = 'calm_corner_wins_v2';
+    const quickMap = {
+      blue: {
+        title: 'Blue Zone support',
+        items: ['Try comfort first: rest, water, blanket, quiet.', 'Use simple words: “I feel low.”', 'Ask an adult for help or a softer task.']
+      },
+      green: {
+        title: 'Green Zone support',
+        items: ['This is a good time to learn, talk, and participate.', 'Keep the feeling going with structure and praise.', 'Use a checklist or first-then support if needed.']
+      },
+      orange: {
+        title: 'Orange Zone support',
+        items: ['Pause before the feeling gets bigger.', 'Breathe, count, squeeze, or take a short walk.', 'Ask for help before overwhelm grows.']
+      },
+      red: {
+        title: 'Red Zone support',
+        items: ['Safety first. Move to the calm corner.', 'Use fewer words and more reassurance.', 'Offer water, pressure, breathing, or adult support.']
+      }
+    };
+
+    const tools = [
+      {id:'ball', icon:'✋', title:'Squeeze a stress ball', text:'Tighten, then slowly let go.'},
+      {id:'draw', icon:'🖍️', title:'Draw feelings', text:'Use color instead of lots of words.'},
+      {id:'breath', icon:'🫁', title:'Take deep breaths', text:'Slow air in. Slow air out.'},
+      {id:'write', icon:'📝', title:'Write or trace words', text:'Short feeling words can help.'},
+      {id:'cold', icon:'❄️', title:'Use a cool pack', text:'Cool sensations can help the body reset.'},
+      {id:'rock', icon:'🪑', title:'Rock in a calm chair', text:'Gentle movement can soothe the nervous system.'},
+      {id:'mirror', icon:'🪞', title:'Look in the mirror', text:'See your face and practice a calm breath.'},
+      {id:'hug', icon:'🧸', title:'Hug a stuffed animal', text:'Soft pressure can feel safe and grounding.'},
+      {id:'walk', icon:'🚶', title:'Take a short walk', text:'A little movement may lower stress.'}
+    ];
+
+    let wins = 0;
+    let breathTimer = null;
+
+    function $(id){ return document.getElementById(id); }
+    function toast(msg){
+      const t = $('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(()=>t.classList.remove('show'), 1500);
+    }
+
+    function setTab(name){
+      document.querySelectorAll('.tab').forEach(btn=>btn.classList.toggle('active', btn.dataset.tab === name));
+      document.querySelectorAll('.tabpanel').forEach(p=>p.classList.add('hidden'));
+      $('tab-' + name).classList.remove('hidden');
+    }
+
+    function loadWins(){
+      const raw = parseInt(localStorage.getItem(WIN_KEY) || '0', 10);
+      wins = Number.isFinite(raw) ? Math.max(0, Math.min(10, raw)) : 0;
+      renderWins();
+    }
+    function renderWins(){
+      $('winFill').style.width = (wins * 10) + '%';
+      $('winText').textContent = wins + '/10';
+    }
+    function addWin(){
+      wins = Math.min(10, wins + 1);
+      localStorage.setItem(WIN_KEY, String(wins));
+      renderWins();
+      toast('Nice job');
+    }
+    function undoWin(){
+      wins = Math.max(0, wins - 1);
+      localStorage.setItem(WIN_KEY, String(wins));
+      renderWins();
+      toast('Undone');
+    }
+
+    function renderQuick(zone){
+      const data = quickMap[zone];
+      $('quickHelp').innerHTML = '<h4>' + data.title + '</h4><ul>' + data.items.map(item => '<li>' + item + '</li>').join('') + '</ul>';
+    }
+
+    function renderTools(){
+      const saved = new Set(JSON.parse(localStorage.getItem(TOOL_KEY) || '[]'));
+      const grid = $('toolGrid');
+      grid.innerHTML = '';
+      tools.forEach(tool => {
+        const card = document.createElement('button');
+        card.className = 'toolCard' + (saved.has(tool.id) ? ' active' : '');
+        card.type = 'button';
+        card.dataset.id = tool.id;
+        card.innerHTML = '<div class="toolTop"><div class="toolIcon">' + tool.icon + '</div><div class="toolTitle">' + tool.title + '</div></div><div class="toolText">' + tool.text + '</div>';
+        card.addEventListener('click', () => toggleTool(tool.id));
+        grid.appendChild(card);
+      });
+      renderToolOutput();
+    }
+
+    function getSelectedTools(){
+      return new Set(JSON.parse(localStorage.getItem(TOOL_KEY) || '[]'));
+    }
+
+    function toggleTool(id){
+      const set = getSelectedTools();
+      if(set.has(id)) set.delete(id);
+      else {
+        if(set.size >= 3){ toast('Pick up to 3 favorites'); return; }
+        set.add(id);
+      }
+      localStorage.setItem(TOOL_KEY, JSON.stringify([...set]));
+      renderTools();
+    }
+
+    function renderToolOutput(){
+      const set = getSelectedTools();
+      const chosen = tools.filter(t => set.has(t.id));
+      const box = $('toolOutput');
+      if(!chosen.length){
+        box.innerHTML = '<h4>Suggested favorites</h4><div class="small">Select up to three calm tools that are most likely to help.</div>';
+        return;
+      }
+      box.innerHTML = '<h4>Saved favorites</h4><ul>' + chosen.map(t => '<li><strong>' + t.title + ':</strong> ' + t.text + '</li>').join('') + '</ul>';
+    }
+
+    function clearTools(){
+      localStorage.setItem(TOOL_KEY, JSON.stringify([]));
+      renderTools();
+      toast('Cleared');
+    }
+
+    function startBreathing(){
+      let remaining = 30;
+      $('breathBox').classList.remove('hidden');
+      $('breathText').textContent = 'Breathe in…';
+      $('breathTime').textContent = '30 seconds left';
+      clearInterval(breathTimer);
+      breathTimer = setInterval(() => {
+        remaining -= 1;
+        $('breathText').textContent = remaining % 8 < 4 ? 'Breathe in…' : 'Breathe out…';
+        $('breathTime').textContent = remaining > 0 ? remaining + ' seconds left' : 'Done';
+        if(remaining <= 0){
+          clearInterval(breathTimer);
+          breathTimer = null;
+          toast('Breathing done');
+        }
+      }, 1000);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadWins();
+      renderTools();
+      document.querySelectorAll('.tab').forEach(btn => btn.addEventListener('click', () => setTab(btn.dataset.tab)));
+      document.querySelectorAll('.checkBtn').forEach(btn => btn.addEventListener('click', () => renderQuick(btn.dataset.zone)));
+      $('btnWin').addEventListener('click', addWin);
+      $('btnUndo').addEventListener('click', undoWin);
+      $('saveTools').addEventListener('click', () => toast('Favorites saved'));
+      $('clearTools').addEventListener('click', clearTools);
+      $('breathBtn').addEventListener('click', startBreathing);
+      setTab('home');
+    });
+  </script>
+</body>
+</html>
