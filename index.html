@@ -294,8 +294,10 @@
       .tool-body{padding:12px}
       .iframe-wrap iframe{width:98vw; max-width:98vw; height:88vh}
     }
-  .hero{
+ .hero{
   position: relative;
+  padding: 18px 16px 24px;
+  text-align: center;
 }
 
 .hero::before{
@@ -303,9 +305,13 @@
   position:absolute;
   inset:0;
   border-radius:20px;
-  background: rgba(255,255,255,0.55);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+
+  /* ✅ clean readable holder (no blur dependency) */
+  background: rgba(255,255,255,0.68);
+
+  /* subtle depth so it still feels like your design */
+  box-shadow: 0 10px 30px rgba(35,50,90,.10);
+
   z-index:0;
 }
 
