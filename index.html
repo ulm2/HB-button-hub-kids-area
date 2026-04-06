@@ -294,7 +294,25 @@
       .tool-body{padding:12px}
       .iframe-wrap iframe{width:98vw; max-width:98vw; height:88vh}
     }
-  
+  .hero{
+  position: relative;
+}
+
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:20px;
+  background: rgba(255,255,255,0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index:0;
+}
+
+.hero > *{
+  position: relative;
+  z-index:1;
+}
 </style>
 
 
